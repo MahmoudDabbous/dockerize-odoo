@@ -1,0 +1,187 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+
+    <record model="ir.ui.view" id="courses_list_view">
+      <field name="name">Courses System list</field>
+      <field name="model">courses</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="professor_id" />
+          <field name="start_date"/>
+          <field name="end_date"/>
+          <field name="cost"/>
+        </tree>
+      </field>
+    </record>
+
+    <record id="courses_form_view" model="ir.ui.view">
+      <field name="name">Courses System</field>
+      <field name="model">courses</field>
+      <field name="arch" type="xml">
+          <form string="Courses">
+            <header>
+              <button string="Open Course" name="open_course" type="object" class="oe_highlight"/>
+              <button string="Close Course" name="close_course" type="object" class="oe_highlight"/>
+              <field name="state" widget="statusbar"/>
+            </header>
+            <sheet>
+              <group>
+                <group>
+                  <field name="name" />
+                  <field name="professor_id" />
+                  <field name="cost" />
+                </group>
+                <group>
+                  <field name="start_date" />
+                  <field name="end_date" />
+                  <field name="tag_ids" widget="many2many_tags"/>
+                  
+                </group>
+              </group>
+              <group>
+                <field name="count" />
+                <field name="phone"/>
+              </group>
+              <notebook>
+                <page name="enroll" string="Enroll Info">
+                  <field name="enroll_ids">
+                    <tree>
+                      <field name="name"/>
+                      <field name="student_id"/>
+                      <field name="enroll_date"/>
+                      <!-- <field name="course_id" invisible="1"/> -->
+                    </tree>
+                  </field>
+                </page>
+              </notebook>
+            </sheet>
+          </form>
+      </field>
+    </record>
+
+
+    <record id="courses_graph_view" model="ir.ui.view">
+      <field name="name">courses.system.graph</field>
+      <field name="model">courses</field>
+      <field name="arch" type="xml">
+          <graph>
+              <field name="name"/>
+              <field name="cost" type="measure"/>
+          </graph>
+      </field>
+  </record>
+
+  <record id="courses_pivot_view" model="ir.ui.view">
+      <field name="name">courses.pivot.view</field>
+      <field name="model">courses</field>
+      <field name="arch" type="xml">
+          <pivot>
+              <field name="name" type="row"/>
+              <field name="cost" type="measure"/>
+          </pivot>
+      </field>
+  </record>
+
+
+    <!-- kanban view -->
+    <record id="courses_kanban_view" model="ir.ui.view">
+      <field name="name">courses.system.kanban</field>
+      <field name="model">courses</field>
+      <field name="arch" type="xml">
+          <kanban>
+            <field name="name"/>
+            <field name="start_date"/>
+            <field name="end_date"/>
+            <field name="cost"/>
+              <templates>
+                  <t t-name="kanban-box">
+                      <div class="row mt4 mb4">
+                        <div>
+                          <field name="name"/>
+                          <!-- <span t-out="record.name.value"/> -->
+                        </div>
+                        <div>
+                          <field name="cost" />
+                        </div>
+                      </div>
+                      <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+                          <div class="o_kanban_record_top mb16">
+                              <div class="o_kanban_record_headings mt4">
+                                  <strong class="">
+                                      <span t-out="record.name.value"/>
+                                  </strong>
+                              </div>
+                              <strong>
+                                  <field name="cost"/>
+                              </strong>
+                          </div>
+                          <div class="o_kanban_record_bottom">
+                              <div class="oe_kanban_bottom_left text-muted">
+                                  <span>
+                                      <t t-out="record.name.value"/> <t t-out="record.date_order.value"/>
+                                  </span>
+                                  <!-- <field name="activity_ids" widget="kanban_activity"/> -->
+                              </div>
+                              <div class="oe_kanban_bottom_right">
+                                  <field name="state"
+                                      widget="label_selection"
+                                      options="{'classes': {'draft': 'info', 'cancel': 'default', 'sale': 'success'}}"/>
+                              </div>
+                          </div>
+                      </div>
+                  </t>
+              </templates>
+          </kanban>
+      </field>
+  </record>
+
+
+    <!-- actions opening views on models -->
+
+    <record model="ir.actions.act_window" id="courses_action_window">
+      <field name="name">Courses</field>
+      <field name="res_model">courses</field>
+      <field name="view_mode">tree,form,kanban,graph,pivot</field>
+    </record>
+
+
+    <!-- server action to the one above -->
+<!--
+    <record model="ir.actions.server" id="courses.action_server">
+      <field name="name">courses server</field>
+      <field name="model_id" ref="model_courses_courses"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record>
+-->
+
+    <!-- Top menu item -->
+
+    <menuitem name="Courses App" id="courses_app_main_menu"/>
+    <menuitem name="Courses" id="courses_menu" parent="courses.courses_app_main_menu"
+              action="courses.courses_action_window"/>
+    <menuitem name="Students" id="student_menu" parent="courses.courses_app_main_menu"/>
+    <menuitem name="Students list" id="student_list_menu" parent="courses.student_menu"
+              action="courses.student_action_window"/>
+
+    <!-- menu categories -->
+<!--
+    <menuitem name="Menu 1" id="courses.menu_1" parent="courses.menu_root"/>
+    <menuitem name="Menu 2" id="courses.menu_2" parent="courses.menu_root"/>
+-->
+    <!-- actions -->
+<!--
+    
+    <menuitem name="Server to list" id="courses" parent="courses.menu_2"
+              action="courses.action_server"/>
+-->
+  </data>
+</odoo>

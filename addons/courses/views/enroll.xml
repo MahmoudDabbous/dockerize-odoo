@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record model="ir.actions.act_window" id="enroll_action_window">
+        <field name="name">Enroll</field>
+        <field name="res_model">enroll</field>
+        <field name="view_mode">tree,form,kanban,graph,pivot</field>
+    </record>
+    <menuitem name="Enroll" id="enroll_menu" parent="courses.courses_app_main_menu"
+              action="courses.enroll_action_window"/>
+</odoo>

@@ -1,0 +1,44 @@
+version: "3.8"
+
+services:
+  web:
+    image: odoo:latest
+    container_name: odoo_web
+    working_dir: /mnt/extra-addons
+    ports:
+      - "8069:8069"
+    volumes:
+      - odoo_data:/mnt/extra-addons
+      - ./addons:/mnt/extra-addons
+    depends_on:
+      - db
+    networks:
+      - odoo_net
+    restart: unless-stopped
+    environment:
+      - ODOO_DATABASE_HOST=db
+      - ODOO_DATABASE_PORT=5432
+      - ODOO_DATABASE_USER=odoo
+      - ODOO_DATABASE_PASSWORD=odoo
+      - ODOO_DATABASE_NAME=postgres
+
+  db:
+    image: postgres:latest
+    container_name: odoo_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=odoo
+      - POSTGRES_PASSWORD=odoo
+    networks:
+      - odoo_net
+    restart: unless-stopped
+
+volumes:
+  odoo_data:
+  postgres_data:
+
+networks:
+  odoo_net:
+    driver: bridge

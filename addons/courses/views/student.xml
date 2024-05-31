@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record model="ir.actions.act_window" id="student_action_window">
+        <field name="name">Students</field>
+        <field name="res_model">student</field>
+        <field name="view_mode">tree,form,kanban,graph,pivot</field>
+    </record>
+    <menuitem name="Students" id="student_menu" parent="courses.courses_app_main_menu"/>
+    <menuitem name="Students list" id="student_list_menu" parent="courses.student_menu"
+              action="courses.student_action_window"/>
+</odoo>
